@@ -48,6 +48,12 @@ class LivroSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         receitas = validated_data.pop('receitas')
         instance = Livro.objects.create(**validated_data)
+        receipts=[]
+        holder= receitas[0]
+        name= holder['name']
+        description= holder['description']
         for receita in receitas:
-            instance.receitas.append(receita)
+             receipts.append(Receita(name=name,description=description))
+        instance.receitas= receipts
+        instance.save()
         return instance
